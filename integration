@@ -1,0 +1,31 @@
+clear 
+close all 
+
+% addpath to scripts
+addpath('/path/to/BCT/') % https://sites.google.com/site/bctnet/
+% load connectivity matrices (nNodes x nNodes x nSubs) 
+load('/path/to/connectivity_matrix.mat');
+
+nInter = number of iterations 
+nSubs = number of subjects 
+
+% set parameters for consensus partition (see https://sites.google.com/site/bctnet/)
+nReps = number of repititions 
+tau = threshold which controls the resolution of the reclustering
+
+for j=1:nSubs
+  for i=1:nIter
+
+    [ci(:,i,j), q(i,1,j)] = community_louvain(connectivity_matrix(:, :, j), gamma);
+    
+    % estimate a 'consensus' partition
+    end 
+    
+    D(:, :) = agreement(ci(:, :, j));
+    ciu(:, j) = consensus_und(D,tau,nReps); 
+  end
+  
+% calculate participation coefficient and module degree z-score (https://sites.google.com/site/bctnet/)
+  part_coef(:,j) = participation_coef(connectivity_matrix(:,:,j), ciu(:,j));
+  modz(:,j) = module_degree_zscore(connectivity_matrix(:,:,j), ciu(:,j));
+end
